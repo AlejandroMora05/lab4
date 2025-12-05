@@ -14,7 +14,7 @@ RUN mvn clean package -DskipTests
 
 FROM openjdk:11-ea-19-jre-slim
 
-COPY --from=build /app/target/lab4v-0.0.1-SNAPSHOT.jar /usr/local/lib/lab4v.jar
+COPY --from=build /app/target/lab4-0.0.1-SNAPSHOT.jar /usr/local/lib/lab4v.jar
 
 EXPOSE 8088
 

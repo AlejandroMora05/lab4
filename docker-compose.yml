@@ -2,74 +2,42 @@ version: '3.8'
 
 services:
 
-  mysql:
-
-    image: mysql:8.0
-
+  postgres:
+    image: postgres:15-alpine
     environment:
-
-      MYSQL_ROOT_PASSWORD: root
-
-      MYSQL_DATABASE: lab4v
-
+      POSTGRES_USER: neondb_owner
+      POSTGRES_PASSWORD: npg_w7GdbF5BJWEp
+      POSTGRES_DB: lab4
     ports:
-
-      - "3306:3306"
-
+      - "5432:5432"
     volumes:
+      - postgres-data:/var/lib/postgresql/data
 
-      - mysql-data:/var/lib/mysql
-
- 
-
-  lab4v:
-
-    build: .
-
+  lab4:
+    build: . 
     ports:
-
       - "8088:8088"
-
     depends_on:
-
-      - mysql
-
+      - postgres
     environment:
-
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/lab4v
-
-      SPRING_DATASOURCE_USERNAME: root
-
-      SPRING_DATASOURCE_PASSWORD: root
-
- 
+      SPRING_DATASOURCE_URL: jdbc:postgresql://ep-frosty-queen-adi61qng-pooler.c-2.us-east-1.aws.neon.tech:5432/neondb?sslmode=require&channelBinding=require
+      SPRING_DATASOURCE_USERNAME: neondb_owner
+      SPRING_DATASOURCE_PASSWORD: npg_w7GdbF5BJWEp
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
 
   prometheus:
-
     image: prom/prometheus
-
     ports:
-
       - "9090:9090"
-
     volumes:
-
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
 
- 
-
   grafana:
-
     image: grafana/grafana
-
     ports:
-
       - "3000:3000"
-
     depends_on:
-
       - prometheus
 
 volumes:
-
-  mysql-data:
+  postgres-data:
