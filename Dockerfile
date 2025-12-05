@@ -1,4 +1,4 @@
-FROM maven:3.8.1-openjdk-11 AS build
+FROM maven:3.9.5-eclipse-temurin-21 AS build
 
 COPY pom.xml /app/
 
@@ -12,10 +12,10 @@ RUN mvn clean package -DskipTests
 
 # Use the official OpenJDK image to run the app
 
-FROM openjdk:11-ea-19-jre-slim
+FROM eclipse-temurin:21-jre-jammy
 
-COPY --from=build /app/target/lab4-0.0.1-SNAPSHOT.jar /usr/local/lib/lab4v.jar
+COPY --from=build /app/target/lab4-0.0.1-SNAPSHOT.jar /usr/local/lib/lab4.jar
 
 EXPOSE 8088
 
-ENTRYPOINT ["java", "-jar", "/usr/local/lib/lab4v.jar"]
+ENTRYPOINT ["java", "-jar", "/usr/local/lib/lab4.jar"]
